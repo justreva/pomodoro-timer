@@ -2,16 +2,22 @@ import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 
 interface ModesProps {
 	timerMode: string;
-	setTimerMode: React.Dispatch<React.SetStateAction<string>>
+	setTimerMode: React.Dispatch<React.SetStateAction<string>>;
+  setSecondLeft:React.Dispatch<React.SetStateAction<number>>;
+  workTime:number;
+  shortBreak: number;
+  longBreak: number;
 }
 
-const Modes = ({timerMode, setTimerMode}:ModesProps) => {
-  
+const Modes = ({timerMode, setTimerMode, setSecondLeft,workTime ,shortBreak, longBreak}:ModesProps) => {
+
+
   const handleChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newAlignment: string
+    event: React.MouseEvent<HTMLElement>
   ) => {
-    setTimerMode(newAlignment);
+    const input = event.target as HTMLInputElement;
+    setTimerMode(input.id);
+    setSecondLeft(Number(input.value) * 60);
   };
   return (
     <div className="flex justify-center mt-5">
@@ -22,9 +28,9 @@ const Modes = ({timerMode, setTimerMode}:ModesProps) => {
         onChange={handleChange}
         aria-label="Platform"
       >
-        <ToggleButton value="work">Work</ToggleButton>
-        <ToggleButton value="short">Short Break</ToggleButton>
-        <ToggleButton value="long">Long Break</ToggleButton>
+        <ToggleButton id="work" value={workTime}>Work</ToggleButton>
+        <ToggleButton id="short" value={shortBreak}>Short Break</ToggleButton>
+        <ToggleButton id="long" value={longBreak}>Long Break</ToggleButton>
       </ToggleButtonGroup>
     </div>
   );

@@ -7,9 +7,9 @@ import Buttons from "./components/Buttons";
 
 function App() {
   const [timerMode, setTimerMode] = useState("work");
-  const [workTime, setWorkTime] = useState(25);
-  const [short, setShort] = useState(3);
-  const [long, setLong] = useState(15);
+  const workTime: number = 25;
+  const shortBreak: number = 3;
+  const longBreak: number = 15;
   const [secondsLeft, setSecondsLeft] = useState(workTime * 60);
   const [isActive, setActive] = useState(false);
 
@@ -18,30 +18,44 @@ function App() {
       const interval = setInterval(() => {
         setSecondsLeft((secondsLeft) => secondsLeft - 1);
       }, 1000);
+
+      if(secondsLeft === 0){
+        clearInterval(interval)
+        
+      }
       return () => clearInterval(interval);
     }
-  }, [isActive]);
+  }, [isActive, secondsLeft]);
 
   const formatedTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${
-      seconds % 60 > 9 ? seconds % 60 : "0" + (seconds % 60)
+      seconds % 60 > 9 ? seconds % 60 : "0" + (seconds % 60)  
     }`;
   };
 
   const calculatePercentage = () => {
-    return ((secondsLeft / (workTime * 60)) * 100)
-  }
+    if (timerMode === "work") {
+      
+      return (secondsLeft / (workTime * 60)) * 100;
+    }
+    if (timerMode === "short") {
+      console.log(timerMode)
+      return (secondsLeft / (shortBreak * 60)) * 100;
+    }
+    if (timerMode === "long") {
+      return (secondsLeft / (longBreak * 60)) * 100;
+    }
+  };
   return (
     <div className="container mt-10">
       <Header title="Pomodoro" />
-      <Modes timerMode={timerMode} setTimerMode={setTimerMode} />
+      <Modes timerMode={timerMode} setTimerMode={setTimerMode} setSecondLeft={setSecondsLeft} workTime={workTime} shortBreak={shortBreak} longBreak={longBreak}/>
       <Progress
         timerText={formatedTime(secondsLeft)}
         percentage={calculatePercentage()}
       />
-      <Buttons isActive={isActive} setActive={setActive}/>
+      <Buttons isActive={isActive} setActive={setActive} />
     </div>
   );
 }
-
 export default App;
