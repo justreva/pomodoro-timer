@@ -9,7 +9,7 @@ import useSound from "use-sound";
 
 function App() {
   const [timerMode, setTimerMode] = useState("work");
-  const workTime: number = .05;
+  const workTime: number = 25;
   const shortBreak: number = 5;
   const longBreak: number = 15;
   const [secondsLeft, setSecondsLeft] = useState(workTime * 60);
