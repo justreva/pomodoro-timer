@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
-import useSound from "use-sound";
 import timesUpMelody from "./sound/timesUp.wav"
 import Header from "./components/Header";
 import Modes from "./components/Modes";
 import Progress from "./components/Progress";
 import Buttons from "./components/Buttons";
 
+import { useEffect, useState } from "react";
+import useSound from "use-sound";
+
 function App() {
   const [timerMode, setTimerMode] = useState("work");
-  const workTime: number = 25;
-  const shortBreak: number = 3;
+  const workTime: number = .05;
+  const shortBreak: number = 5;
   const longBreak: number = 15;
   const [secondsLeft, setSecondsLeft] = useState(workTime * 60);
   const [isActive, setActive] = useState(false);
   const [timesUp] = useSound(timesUpMelody)
+
 
   useEffect(() => {
     if (isActive) {
@@ -22,12 +24,13 @@ function App() {
       }, 1000);
 
       if (secondsLeft === 0) {
+        setActive(false)
         clearInterval(interval);
         timesUp()
       }
       return () => clearInterval(interval);
     }
-  }, [isActive, secondsLeft]);
+  }, [isActive, secondsLeft, timesUp]);
 
   const formatedTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${
@@ -35,7 +38,7 @@ function App() {
     }`;
   };
 
-  const calculatePercentage = () => {
+  const calculatePercentage = ():number => {
     if (timerMode === "work") {
       return (secondsLeft / (workTime * 60)) * 100;
     }
@@ -45,6 +48,8 @@ function App() {
     if (timerMode === "long") {
       return (secondsLeft / (longBreak * 60)) * 100;
     }
+
+    return 0
   };
   return (
     <div className="container mt-10">

@@ -8,7 +8,6 @@ interface ButtonsProps {
 const Buttons = ({ isActive, setActive }: ButtonsProps) => {
   return (
     <div className="flex justify-center mt-10">
-			
       <ToggleButton value="check" onChange={() => setActive(!isActive)}>
         {isActive ? "Pause" : "Start"}
       </ToggleButton>
